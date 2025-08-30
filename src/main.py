@@ -1,4 +1,7 @@
+from hmac import new
+from pdb import pm
 import random
+from src.genetic_agorithm import tournament_selction, pmx_crossover, inversion_mutation
 from tsp_problem import generate_cities
 from tsp_problem import calculate_total_distance
 
@@ -22,28 +25,32 @@ def main():
 
     for generation in range(NUM_GENERATIONS):
 
-        best_in_generation = None
-        best_distance_in_generation = float('inf')    
+        best_in_generation = max(population, key=lambda x: -calculate_total_distance(x, cities))
+        current_best_distance = calculate_total_distance(best_in_generation, cities)
 
-        for individual in population:
-            distance = calculate_total_distance(individual, cities)
-            if distance < best_distance_in_generation:
-                best_distance_in_generation = distance
-                best_in_generation = individual
-
-        if distance < best_overall_distance:
-            best_overall_distance = best_distance_in_generation
+        if current_best_distance < best_overall_distance:
+            best_overall_distance = current_best_distance
             best_overall_route = best_in_generation
+
+        new_population = [best_in_generation]
+
+        for _ in range(POPULATION_SIZE // 2 - 1):
+            parent1 = tournament_selction(population, cities)
+            parent2 = tournament_selction(population, cities)
+
+            child1, child2 = pmx_crossover(parent1, parent2)
+
+            new_population.append(child1)
+            new_population.append(child2)
         
-        # TODO: Add genetic algorithm operations (selection, crossover, mutation) here
+        population = new_population
 
-        print(f"Generation {generation + 1} / {NUM_GENERATIONS}, Shortest distance = {best_distance_in_generation:.2f}")
+        print(f"Generacija {generation + 1}/{NUM_GENERATIONS}: Najkraći put = {current_best_distance:.2f}")
 
-
-        # printing finall results
-        print("\n---End of evolution---")
-        print(f"Shortest distance found: {best_overall_distance:.2f}")
-        print(f"Best route: {best_overall_route}")
+    # printing finall results
+    print("\n---End of evolution---")
+    print(f"Shortest distance found: {best_overall_distance:.2f}")
+    print(f"Best route: {best_overall_route}")
 
 
 if __name__ == '__main__':
