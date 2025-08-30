@@ -1,4 +1,5 @@
 import random
+import re
 from src.tsp_problem import calculate_total_distance
 
 # Logic for tournament selection, finding the best route 
@@ -46,3 +47,17 @@ def pmx_crossover(parent1, parent2):
         fill_gaps(child2, parent2, parent1, start_pos, end_pos)
 
         return child1, child2
+    
+# Inversion mutation function
+def inversion_mutation(route):
+    size = len(route)
+    start = random.randint(0, size - 1)
+    end = random.randint(0, size - 1)
+
+    if start > end:
+        start, end = end, start
+
+    mutated_route = route[:] 
+    mutated_route[start:end] = mutated_route[start:end][::-1]
+
+    return mutated_route
