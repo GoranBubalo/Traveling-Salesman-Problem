@@ -1,7 +1,5 @@
-from hmac import new
-from pdb import pm
 import random
-from src.genetic_agorithm import tournament_selction, pmx_crossover, inversion_mutation
+from genetic_agorithm import tournament_selction, pmx_crossover, inversion_mutation
 from tsp_problem import generate_cities
 from tsp_problem import calculate_total_distance
 
@@ -25,16 +23,16 @@ def main():
 
     for generation in range(NUM_GENERATIONS):
 
-        best_in_generation = max(population, key=lambda x: -calculate_total_distance(x, cities))
+        best_in_generation = min(population, key=lambda x: calculate_total_distance(x, cities))
         current_best_distance = calculate_total_distance(best_in_generation, cities)
 
         if current_best_distance < best_overall_distance:
             best_overall_distance = current_best_distance
             best_overall_route = best_in_generation
-
+ 
         new_population = [best_in_generation]
 
-        for _ in range(POPULATION_SIZE // 2 - 1):
+        for _ in range(POPULATION_SIZE // 2):
             parent1 = tournament_selction(population, cities)
             parent2 = tournament_selction(population, cities)
 
@@ -42,6 +40,15 @@ def main():
 
             new_population.append(child1)
             new_population.append(child2)
+
+            if len(population) >= POPULATION_SIZE:
+                new_population = new_population[:POPULATION_SIZE]
+                break
+
+        mutation_rate = 0.05
+        for i in range(1, len(new_population)):
+            if random.random() < mutation_rate:
+                new_population[i] = inversion_mutation(new_population[i])
         
         population = new_population
 
