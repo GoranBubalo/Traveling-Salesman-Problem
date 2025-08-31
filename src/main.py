@@ -4,7 +4,7 @@ from tsp_problem import generate_cities
 from tsp_problem import calculate_total_distance
 
 NUM_CITIES = 30
-POPULATION_SIZE = 100
+POPULATION_SIZE = 20
 NUM_GENERATIONS = 1000
 
 def main():
@@ -32,18 +32,22 @@ def main():
  
         new_population = [best_in_generation]
 
-        for _ in range(POPULATION_SIZE // 2):
+        while len(new_population) < POPULATION_SIZE:
             parent1 = tournament_selction(population, cities)
             parent2 = tournament_selction(population, cities)
 
+            # Checking if valid  (Temporaly fix), if not valid ignore and move to next parent
+            while parent1 == parent2:
+                parent2 = tournament_selction(population, cities)
             child1, child2 = pmx_crossover(parent1, parent2)
 
-            new_population.append(child1)
-            new_population.append(child2)
-
-            if len(population) >= POPULATION_SIZE:
-                new_population = new_population[:POPULATION_SIZE]
-                break
+            if len(set(child1)) == NUM_CITIES and len(set(child2)) == NUM_CITIES:
+                new_population.append(child1)
+                if len(new_population) < POPULATION_SIZE:
+                    new_population.append(child2)
+            
+           
+        new_population = new_population[:POPULATION_SIZE]
 
         mutation_rate = 0.05
         for i in range(1, len(new_population)):
