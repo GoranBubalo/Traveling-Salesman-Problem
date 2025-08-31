@@ -23,7 +23,7 @@ def calculate_total_distance(route, cities):
         city2 = cities[city2_index]
         total_distance += euclidian_distance(city1, city2) 
 
-    # From last city to the last city 
+    # From last city to the first city 
     last_city_index = route[num_cities - 1]
     first_city_index = route[0]
     last_city = cities[last_city_index]
