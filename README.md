@@ -9,18 +9,28 @@ Ovaj projekt koristi **genetski algoritam** za pronalazak približno optimalne r
 - **PMX crossover**: kombinacija roditeljskih rutu u djecu, zadržavajući jedinstvenost gradova
 - **Inversion mutation**: mutacija dijela rute obrnutim redoslijedom
 
+pip install -r requirements.txt
 ## 3. Upute za pokretanje
 1. Instalirati Python 3.12+  
-2. Kreirati virtualno okruženje:
+
+2. Kreirati i aktivirati virtualno okruženje te instalirati ovisnosti:
+
+### Linux/macOS
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+source venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+```
 
-    Instalirati potrebne biblioteke:
+### Windows
+```cmd
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python src/main.py
+```
 
-pip install matplotlib
+> **Napomena:** Ako koristite PowerShell na Windowsu, aktivacija je `venv\Scripts\Activate.ps1`.
 
-    Pokrenuti projekt:
-
-python3 main.py
+Projekt će raditi na oba operativna sustava ako su svi koraci ispravno izvedeni.
