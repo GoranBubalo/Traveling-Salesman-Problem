@@ -20,7 +20,7 @@ pip install -r requirements.txt
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python src/main.py
+python3 src/main.py
 ```
 
 ### Windows
@@ -32,5 +32,6 @@ python src/main.py
 ```
 
 > **Napomena:** Ako koristite PowerShell na Windowsu, aktivacija je `venv\Scripts\Activate.ps1`.
+> **Napomena:** Ako želiš da projekt vizualno prikaže TSP na WSL2 potrebno je imati WSLg (WSL GUI) podršku.
 
 Projekt će raditi na oba operativna sustava ako su svi koraci ispravno izvedeni.
