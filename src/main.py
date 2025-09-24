@@ -3,27 +3,35 @@ from genetic_agorithm import tournament_selction, pmx_crossover, inversion_mutat
 from tsp_problem import generate_cities
 from tsp_problem import calculate_total_distance
 import matplotlib.pyplot as plt
-import matplotlib
+
+import imageio.v2 as imageio
+import os
+import shutil
 
 
 NUM_CITIES = 30
 POPULATION_SIZE = 20
 NUM_GENERATIONS = 1000
+MUTATION_RATE = 0.05
+
+
+os.makedirs("plots", exist_ok=True)
 
 
 def plot_route(cities, route, generation, distance):
     x = [cities[i][0] for i in route] + [cities[route[0]][0]]
     y = [cities[i][1] for i in route] + [cities[route[0]][1]]
     plt.clf()
-    plt.plot(x, y, marker='o')
+    plt.plot(x, y, marker='o', color ='blue')
     plt.title(f'Generacija {generation} | Najkraći put: {distance:.2f}')
-    plt.pause(0.01)
+    if generation % 10 == 0 or generation == NUM_GENERATIONS - 1:
+        plt.savefig(f"plots/gen_{generation:04d}.png")
 
 def main():
 
     print("Initializing...")
     cities = generate_cities(NUM_CITIES)
-    plt.ion()
+    plt.figure(figsize=(6,6))
 
     population = []
     for _ in range(POPULATION_SIZE):
@@ -39,8 +47,8 @@ def main():
         best_in_generation = min(population, key=lambda x: calculate_total_distance(x, cities))
         current_best_distance = calculate_total_distance(best_in_generation, cities)
 
-        if generation % 10 == 0 or generation == NUM_GENERATIONS - 1:
-            plot_route(cities, best_in_generation, generation + 1, current_best_distance)
+        # Minimal change: visualize
+        plot_route(cities, best_in_generation, generation + 1, current_best_distance)
 
         if current_best_distance < best_overall_distance:
             best_overall_distance = current_best_distance
@@ -66,9 +74,8 @@ def main():
            
         new_population = new_population[:POPULATION_SIZE]
 
-        mutation_rate = 0.05
         for i in range(1, len(new_population)):
-            if random.random() < mutation_rate:
+            if random.random() < MUTATION_RATE:
                 new_population[i] = inversion_mutation(new_population[i])
         
         population = new_population
@@ -81,9 +88,20 @@ def main():
     print(f"Best route: {best_overall_route}")
 
     plt.ioff()
-    plt.show()
-    matplotlib.use('TkAgg')
+    plt.close()
 
+    # Create GIF from saved plots 
+    images = []
+    for filename in sorted(os.listdir("plots")):
+        if filename.endswith(".png"):
+            images.append(imageio.imread(os.path.join("plots", filename)))
+    imageio.mimsave("tsp_evolution.gif", images, fps=5)
+    print("Animation saved as tsp_evolution.gif")
 
 if __name__ == '__main__':
+
+    # cleaning old folder
+    if os.path.exists("plots"):
+        shutil.rmtree("plots")
+    os.makedirs("plots", exist_ok=True)
     main()
