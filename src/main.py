@@ -57,6 +57,7 @@ def main():
                 parent2 = tournament_selction(population, cities)
             child1, child2 = pmx_crossover(parent1, parent2)
 
+            # Checking if the children are valid
             if len(set(child1)) == NUM_CITIES and len(set(child2)) == NUM_CITIES:
                 new_population.append(child1)
                 if len(new_population) < POPULATION_SIZE:
