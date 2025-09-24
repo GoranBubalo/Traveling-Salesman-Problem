@@ -14,10 +14,6 @@ POPULATION_SIZE = 20
 NUM_GENERATIONS = 1000
 MUTATION_RATE = 0.05
 
-
-os.makedirs("plots", exist_ok=True)
-
-
 def plot_route(cities, route, generation, distance):
     x = [cities[i][0] for i in route] + [cities[route[0]][0]]
     y = [cities[i][1] for i in route] + [cities[route[0]][1]]
